@@ -2,6 +2,8 @@ lfs7.5
 ======
 
 Create a linux distribution, following instructions on LFS 7.5
+All the scripts in this repo should be run on Ubuntu 12.04 x86, and the new created linux
+distribution is based on x86 system.
 
 ### Preparation ###
 # root #
