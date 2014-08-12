@@ -1,9 +1,8 @@
 lfs7.5
 ======
 
-Create a linux distribution, following instructions on LFS 7.5
-All the scripts in this repo should be run on Ubuntu 12.04 x86, and the new created linux
-distribution is based on x86 system.
+Create a linux distribution, following instructions on LFS 7.5.
+All the scripts in this repo should be run on Ubuntu 12.04 x86, and the new created linux distribution is based on x86 system.
 
 ### Preparation ###
 # root #
@@ -106,3 +105,32 @@ exec /tools/bin/bash --login +h
 rm -rf /build/* /tmp/*
 
 ### Setup boot system ###
+
+cp build-round3/* /build/
+cd /build
+./build.sh
+
+tar -Jxf ../sources/linux-3.13.3.tar.xz
+cd linux-3.13.3
+make mrproper
+make LANG=C LC_ALL= menuconfig
+make
+make modules_install
+
+cp -v arch/x86/boot/bzImage /boot/vmlinuz-3.13.3-lfs-7.5
+cp -v System.map /boot/System.map-3.13.3
+cp -v .config /boot/config-3.13.3
+install -d /usr/share/doc/linux-3.13.3
+cp -r Documentation/* /usr/share/doc/linux-3.13.4
+
+install -v -m755 -d /etc/modprobe.d
+cat > /etc/modprobe.d/usb.conf << "EOF"
+# Begin /etc/modprobe.d/usb.conf
+
+install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
+install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
+
+# End /etc/modprobe.d/usb.conf
+EOF
+
+
