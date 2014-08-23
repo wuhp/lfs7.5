@@ -2,7 +2,11 @@ lfs7.5
 ======
 
 Create a linux distribution, following instructions on LFS 7.5.
-All the scripts in this repo should be run on Ubuntu 12.04 x86, and the new created linux distribution is based on x86 system.
+
+All the steps done in this README are tested in ubuntu 12.04 x86.
+
+1. The host Ubuntu 12.04 is a vm created in VMware Fusion
+2. The target new linux distribution(LFS) is also based on x86 system
 
 ### Preparation ###
 # root #
@@ -113,6 +117,21 @@ cd /build
 tar -Jxf ../sources/linux-3.13.3.tar.xz
 cd linux-3.13.3
 make mrproper
+
+# Tips on kernel configuration
+# 1. disable 64-bit kernel
+#   64-bit kernel
+# 2. enable fusion MPT scsi support
+#   Device Drivers  --->
+#     Fusion MPT device support --->
+#       Fusion MPT ScsiHost drivers for SPI
+# 3. support recent changes in udev
+#   Device Drivers  --->
+#     Generic Driver Options  --->
+#       Maintain a devtmpfs filesystem to mount at /dev
+# 4. Every item in compile config should be kernel built-in, not module, since we don't use initramdisk when booting
+
+# An config example for building kernel, "example_kernel.config"
 make LANG=C LC_ALL= menuconfig
 make
 make modules_install
@@ -133,4 +152,7 @@ install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
 # End /etc/modprobe.d/usb.conf
 EOF
 
+### Boot lfs ###
+
+reboot
 
