@@ -155,4 +155,8 @@ EOF
 ### Boot lfs ###
 
 reboot
-
+# enter grub cmd line
+ls
+set root=(xx,xx)
+linux /boot/vmlinuz-3.13.3-lfs-7.5 root=/dev/sdb1
+boot
