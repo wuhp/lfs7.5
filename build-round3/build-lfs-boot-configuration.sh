@@ -19,6 +19,10 @@ cat > /etc/resolv.conf << "EOF"
 nameserver 192.168.202.2
 EOF
 
+cat > /etc/hosts << "EOF"
+127.0.0.1 localhost
+EOF
+
 cat > /etc/inittab << "EOF"
 # Begin /etc/inittab
 
