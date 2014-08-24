@@ -152,6 +152,15 @@ install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
 # End /etc/modprobe.d/usb.conf
 EOF
 
+echo 7.5 > /etc/lfs-release
+
+cat > /etc/lsb-release << "EOF"
+DISTRIB_ID="Linux From Scratch"
+DISTRIB_RELEASE="7.5"
+DISTRIB_CODENAME="wuhp"
+DISTRIB_DESCRIPTION="Linux From Scratch"
+EOF
+
 ### Boot lfs ###
 
 reboot
