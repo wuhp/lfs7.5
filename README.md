@@ -66,6 +66,7 @@ $ chown -v lfs ${LFS}/workspace
 
 # Download source files and copy build script
 $ wget -i lfs7.5/resource/wget-list -P ${LFS}/sources
+$ [ `ls ${LFS}/sources | wc -l` -ne 72 ] && echo "Downlod not complete"
 $ [ -d ${LFS}/workspace/lfs7.5 ] || cp -r lfs7.5 ${LFS}/workspace/lfs7.5
 
 # Set env for lfs
