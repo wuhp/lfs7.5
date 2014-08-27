@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat > /etc/fstab << "EOF"
+cat > /etc/fstab << EOF
 # Begin /etc/fstab
 
 # file system  mount-point  type     options             dump  fsck

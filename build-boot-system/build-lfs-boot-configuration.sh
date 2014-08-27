@@ -5,7 +5,7 @@
 mkdir -p /etc/sysconfig/
 
 cd /etc/sysconfig/
-cat > ifconfig.${NET_INTERFACE} << "EOF"
+cat > ifconfig.${NET_INTERFACE} << EOF
 ONBOOT=yes
 IFACE=${NET_INTERFACE}
 SERVICE=ipv4-static
@@ -15,7 +15,7 @@ PREFIX=${NET_PREFIX}
 BROADCAST=${NET_BROADCAST}
 EOF
 
-cat > /etc/resolv.conf << "EOF"
+cat > /etc/resolv.conf << EOF
 nameserver ${DNS_SERVER}
 EOF
 

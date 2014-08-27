@@ -117,7 +117,6 @@ $ chroot "$LFS" /tools/bin/env -i \
 # Env setup in lfs system
 $ cd /workspace/lfs7.5
 $ ./build_lfs_system__lfs_setup.sh
-$ exec /tools/bin/bash --login +h
 
 # Start lfs build
 $ cd /workspace/lfs7.5
@@ -167,7 +166,7 @@ $ cp -v arch/x86/boot/bzImage /boot/vmlinuz-3.13.3-lfs-7.5
 $ cp -v System.map /boot/System.map-3.13.3
 $ cp -v .config /boot/config-3.13.3
 $ install -d /usr/share/doc/linux-3.13.3
-$ cp -r Documentation/* /usr/share/doc/linux-3.13.4
+$ cp -r Documentation/* /usr/share/doc/linux-3.13.3
 
 $ install -v -m755 -d /etc/modprobe.d
 $ cat > /etc/modprobe.d/usb.conf << "EOF"
