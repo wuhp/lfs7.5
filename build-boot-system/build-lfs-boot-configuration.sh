@@ -5,18 +5,18 @@
 mkdir -p /etc/sysconfig/
 
 cd /etc/sysconfig/
-cat > ifconfig.eth0 << "EOF"
+cat > ifconfig.${NET_INTERFACE} << "EOF"
 ONBOOT=yes
-IFACE=eth0
+IFACE=${NET_INTERFACE}
 SERVICE=ipv4-static
-IP=192.168.202.200
-GATEWAY=192.168.202.2
-PREFIX=24
-BROADCAST=192.168.202.255
+IP=${NET_IP}
+GATEWAY=${NET_GATEWAY}
+PREFIX=${NET_PREFIX}
+BROADCAST=${NET_BROADCAST}
 EOF
 
 cat > /etc/resolv.conf << "EOF"
-nameserver 192.168.202.2
+nameserver ${DNS_SERVER}
 EOF
 
 cat > /etc/hosts << "EOF"
@@ -52,7 +52,7 @@ su:S016:once:/sbin/sulogin
 # End /etc/inittab
 EOF
 
-echo "HOSTNAME=LFS" > /etc/sysconfig/network
+echo "HOSTNAME=${LFS_HOSTNAME}" > /etc/sysconfig/network
 
 cat > /etc/sysconfig/clock << "EOF"
 # Begin /etc/sysconfig/clock
