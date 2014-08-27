@@ -116,7 +116,7 @@ $ chroot "$LFS" /tools/bin/env -i \
 
 # Env setup in lfs system
 $ cd /workspace/lfs7.5
-$ build_lfs_system__lfs_setup.sh
+$ ./build_lfs_system__lfs_setup.sh
 $ exec /tools/bin/bash --login +h
 
 # Start lfs build
