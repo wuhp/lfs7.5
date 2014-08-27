@@ -3,72 +3,78 @@ lfs7.5
 
 Create a linux distribution, following instructions on LFS 7.5.
 
-All the steps done in this README are tested in ubuntu 12.04 x86.
-
-1. The host Ubuntu 12.04 is a vm created in VMware Fusion
-2. The target new linux distribution(LFS) is also based on x86 system
+All the steps done in this README are tested in below environment.
+1. Host machine is virtual machine in VMware Fusion 4.1.4
+2. Host machine is Ubuntu 12.04 x86
+3. New target linux distribution(LFS) is run on x86 system
+4. New target linux distribution(LFS) is built on an additional hard disk(SCSI)
 
 ### Preparation ###
-# root #
 
-apt-get install openssh-server
-apt-get update
-apt-get upgrade
-apt-get install vim curl tree
+# Following commands are assumed to be run as root
+$ su -
 
-### Below package will be used during LFS building
-apt-get install build-essential
-apt-get install gawk
-apt-get install bison
-apt-get install flex
-apt-get install byacc
+# Fetch build scripts
+git clone https://github.com/wuhp/lfs7.5.git
 
-### Create partition
-# Add an 20G SCSI hard disk
-# /dev/sdb
+# Set env for root
+$ echo "export LFS=/mnt/lfs"  >> ~/.bashrc
+$ bash
 
-fdisk -l
-fdisk /dev/sdb
-# create primary partition /dev/sdb1
-mkfs -v -t ext4 /dev/sdb1
+# Install necessary packages which will be used during LFS building
+$ apt-get install -y curl build-essential gawk bison flex byacc
 
-### Env setup
-cat > ~/.bashrc << "EOF"
-export LFS=/mnt/lfs
-export PS1='[\u@\h:\W]$ '
+# Create disk and partition
+1) Shutdown the host vm
+2) Add an 20G SCSI hard disk
+     Virtual Machine --> Settings --> Add device --> New Hard Disk
+3) Power on the host vm, login as root
+4) Run command below to check if the new hard disk is added, usually it will be "/dev/sdb"
+     fdisk -l
+
+$ fdisk /dev/sdb
+Command (m for help): n
+Select (default p):
+Partition number (1-4, default 1):
+First sector (2048-41943039, default 2048):
+Last sector, +sectors or +size{K,M,G} (2048-41943039, default 41943039):
+Command (m for help): w
+
+# Format partition
+$ mkfs -v -t ext4 /dev/sdb1
+
+# Create a new user to build LFS
+$ groupadd lfs
+$ useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+$ passwd lfs
+
+# Setup build file system
+$ mkdir -p ${LFS}
+$ mount /dev/sdb1 ${LFS}
+$ mkdir ${LFS}/tools
+$ mkdir ${LFS}/sources
+$ mkdir ${LFS}/build
+$ mkdir ${LFS}/workspace
+$ ln -sv ${LFS}/tools /
+
+# Change build system owner to lfs
+$ chown -v lfs ${LFS}/tools
+$ chown -v lfs ${LFS}/sources
+$ chown -v lfs ${LFS}/build
+$ chown -v lfs ${LFS}/workspace
+
+# Download source files and copy build script
+$ wget -i lfs7.5/resource/wget-list -P ${LFS}/sources
+$ [ -d ${LFS}/workspace/lfs7.5 ] || cp -r lfs7.5 ${LFS}/workspace/lfs7.5
+
+# Set env for lfs
+$ su - lfs
+
+$ cat > ~/.bash_profile << EOF
+exec env -i HOME=$HOME TERM=$TERM /bin/bash
 EOF
 
-mkdir ${LFS}
-mount /dev/sdb1 ${LFS}
-
-mkdir ${LFS}/tools
-mkdir ${LFS}/sources
-mkdir ${LFS}/build
-
-ln -sv ${LFS}/tools /
-
-groupadd lfs
-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
-passwd lfs  ### lfs
-
-chown -v lfs ${LFS}/tools
-chown -v lfs ${LFS}/sources
-chown -v lfs ${LFS}/build
-
-### Download sources
-cd ~
-wget http://www.linuxfromscratch.org/lfs/downloads/7.5/wget-list
-wget -i wget-list -P ${LFS}/sources
-
-----------------------------------------------------------------------
-
-# lfs #
-
-cat > ~/.bash_profile << "EOF"
-exec env -i HOME=$HOME TERM=$TERM PS1='[\u@\h:\W]$ ' /bin/bash
-EOF
-
-cat > ~/.bashrc << "EOF"
+$ cat > ~/.bashrc << EOF
 set +h
 umask 022
 LFS=/mnt/lfs
@@ -76,16 +82,11 @@ LC_ALL=POSIX
 LFS_TGT=$(uname -m)-lfs-linux-gnu
 PATH=/tools/bin:/bin:/usr/bin
 export LFS LC_ALL LFS_TGT PATH
-export PS1='[\u@\h:\W]$ '
 EOF
 
-### Build Round 1 ###
-### re-login as lfs
-env
-echo $LFS
-echo $LFS_TGT
-
-./build.sh
+### Constructing a Temporary System ###
+cd ${LFS}/workspace/lfs7.5
+./build_temp_system.sh
 
 ### Build Round 2 ###
 
