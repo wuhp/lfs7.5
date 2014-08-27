@@ -123,6 +123,8 @@ $ ./build_lfs_system__lfs_setup.sh
 $ cd /workspace/lfs7.5
 $ ./build_lfs_system.sh
 
+# Set roor passwd for lfs, passwd is empty
+$ passwd root
 
 ### Setup boot system ###
 
