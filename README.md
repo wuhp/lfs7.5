@@ -119,17 +119,25 @@ cd linux-3.13.3
 make mrproper
 
 # Tips on kernel configuration
-# 1. disable 64-bit kernel
+# 1. Disable 64-bit kernel
 #   64-bit kernel
-# 2. enable fusion MPT scsi support
+# 2. Enable fusion MPT scsi support
 #   Device Drivers  --->
 #     Fusion MPT device support --->
 #       Fusion MPT ScsiHost drivers for SPI
-# 3. support recent changes in udev
+#       Fusion MPT misc device (ioctl) driver
+# 3. Support recent changes in udev, enable devtmpfs
 #   Device Drivers  --->
 #     Generic Driver Options  --->
 #       Maintain a devtmpfs filesystem to mount at /dev
-# 4. Every item in compile config should be kernel built-in, not module, since we don't use initramdisk when booting
+# 4. Enable PCnet32 PCI support
+#   Device Drivers  --->
+#     Network device support  --->
+#       Ethernet driver support  --->
+#         AMD devices  --->
+#           AMD PCnet32 PCI support
+# 5. Every item which needs to be built should be kernel built-in in ".config", should not be module, since we don't use initramdisk when booting
+#   sed -i "s/=m/=y/g" .config
 
 # An config example for building kernel, "example_kernel.config"
 make LANG=C LC_ALL= menuconfig
