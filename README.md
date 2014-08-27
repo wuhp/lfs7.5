@@ -159,6 +159,7 @@ $ make mrproper
 
 # An example of kernel config file is located in git repo, named "example_kernel.config"
 $ make LANG=C LC_ALL= menuconfig
+$ sed -i "s/=m/=y/g" .config
 $ make
 $ make modules_install
 
