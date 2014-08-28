@@ -3,8 +3,9 @@
 # Following commands are assumed to be run as root
 $ su -
 
-# Fetch build scripts
+# Fetch build scripts and update file env.def
 $ git clone https://github.com/wuhp/lfs7.5.git
+$ vi lfs7.5/env.def
 
 # Set env for root
 $ echo "export LFS=/mnt/lfs"  >> ~/.bashrc
